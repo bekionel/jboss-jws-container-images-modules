@@ -7,6 +7,11 @@ ADDED_DIR="$SCRIPT_DIR/added"
 
 # install prometheus-jmx-exporter
 dnf install -y prometheus-jmx-exporter
+if ! $(ls -la /etc/alternatives/java |grep -q "java-1\.8\.0"); then
+    if [ -n "$(yum list installed java-1.8.0-openjdk-devel |grep java-1.8.0-openjdk-devel)" ]; then
+        rpm -e --nodeps java-11-openjdk-headless prometheus-jmx-exporter-openjdk1
+    fi
+fi
 dnf clean all
 
 # copy the configuration for JWS
